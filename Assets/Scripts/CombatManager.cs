@@ -18,6 +18,10 @@ public class CombatManager : MonoBehaviour
 
     public static CombatManager Instance;
 
+    bool isFightRunning = false;
+
+    public bool IsFightRunning => isFightRunning;
+
     private void Awake()
     {
         Instance = this;
@@ -41,6 +45,7 @@ public class CombatManager : MonoBehaviour
         }
         //Subscribe to agent death to check for fight over
         Agent.OnDeath += OnAgentDeath;
+        isFightRunning = true;
         //Subscribe to agent hit to check for draws
         //BUG: Draw event stuff
         lastOnHitTime = Time.time;
@@ -79,16 +84,23 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
-            if (teamsWithLivingPlayerAlive <= 1)
+            if (teamsWithLivingPlayerAlive >= 2)
             {
-                EndFight();
-                return;
+                break;
             }
+        }
+
+        if (teamsWithLivingPlayerAlive <= 1)
+        {
+            EndFight();
+            return;
         }
     }
 
     private void EndFight()
     {
+        isFightRunning = false;
+
         List<List<ValueTuple<float, AgentData>>> teamsScores = new List<List<(float, AgentData)>>();
 
         foreach (List<Agent> team in teams)

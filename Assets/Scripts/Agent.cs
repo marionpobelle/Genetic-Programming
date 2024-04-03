@@ -59,9 +59,8 @@ public class Agent : MonoBehaviour
 
     private void Update()
     {
-        Debug.LogWarning("TODO : Check if game is running");
-        //if(!ComabatManager.Instance.IsGameRunning)
-        //  return;
+        if(!CombatManager.Instance.IsFightRunning)
+          return;
 
         if (target == null || !target.IsAlive)
         {
