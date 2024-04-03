@@ -1,18 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Agent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Renderer agentRenderer;
+
+    /// <summary>
+    /// Called when the agent is instantiated
+    /// </summary>
+    /// <param name="teamMaterial"></param>
+    public void SetupAgent(Material teamMaterial)
     {
-        
+        agentRenderer.material = teamMaterial;
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Called when the fight starts
+    /// </summary>
+    /// <param name="initialPosition"></param>
+    public void InitAgent(Vector3 initialPosition)
     {
-        
+        transform.position = initialPosition;
     }
 }
