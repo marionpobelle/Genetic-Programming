@@ -53,6 +53,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6a391b8b3ebc29b47a9c423178224849, type: 2}
   - {fileID: 2100000, guid: 83d8ec860a057f741aaf9dba5e88445b, type: 2}
   combatManager: {fileID: -4706845278638828851}
+  shuffler: {fileID: 2347678840408606407}
 --- !u!114 &-4706845278638828851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,3 +79,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc55a9ca251812429936db98fce13ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxPointsToGive: 100

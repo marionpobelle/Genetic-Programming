@@ -122,7 +122,7 @@ public class Agent : MonoBehaviour
 
         float inflictedDamage = 0;
 
-        inflictedDamage += attackingAgent.Data.Attack / (Data.Defense + 1);
+        inflictedDamage = Mathf.Max(1, attackingAgent.Data.Attack / (Data.Defense + 1));
 
         attackingAgent.TotalDamageInflicted += inflictedDamage;
 
