@@ -12,6 +12,11 @@ public class CombatManager : MonoBehaviour
 
     public static CombatManager Instance;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public void AddTeam(List<Agent> newTeam)
     {
         teams.Add(newTeam);
@@ -63,6 +68,7 @@ public class CombatManager : MonoBehaviour
             teamsScores.Add(GetTeamScore(team));
         }
 
+        Agent.OnDeath -= OnAgentDeath;
         fightOverCallback?.Invoke(teamsScores);
     }
 

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class AgentData
 {
     int baseMaxHP = 100;
@@ -23,13 +25,11 @@ public class AgentData
     int multiplierHP = 3;
     float multiplierAttackDistance = 0.5f;
 
-    public int HP => baseMaxHP + AdditionalHPPoints * multiplierHP;
+    public int MaxHP => baseMaxHP + AdditionalHPPoints * multiplierHP;
     public int Attack => baseAttack + AdditionalAttackPoints;
     public int Defense => baseDefense + AdditionalDefensePoints;
     public int Evasiveness => baseEvasiveness + AdditionalEvasivenessPoints;
     public int Precision => basePrecision + AdditionalPrecisionPoints;
     public int AttackSpeed => baseAttackSpeed + AdditionalAttackSpeedPoints;
     public float AttackDistance => baseAttackDistance + AdditionalAttackDistancePoints * multiplierAttackDistance;
-
-
 }

@@ -13,16 +13,18 @@ public class Agent : MonoBehaviour
     [SerializeField] float aliveScoreMultiplier = 1;
     [SerializeField] Renderer agentRenderer;
     public int teamIndex;
+    [SerializeField] NavMeshAgent navMeshAgent;
     public AgentData Data;
-    NavMeshAgent navMesh;
 
     float currentHP;
-    public bool IsAlive;
+    public bool IsAlive = true;
     Agent target;
 
     public float TotalDamageInflicted = 0.0f;
     public int KillAmount = 0;
     public float PercentageAliveInGame = 0.0f;
+
+    float nextAllowedAttackTime = 0;
 
     public static event Action OnHit;
     public static event Action OnDeath;
@@ -43,7 +45,10 @@ public class Agent : MonoBehaviour
     /// </summary>
     public void InitAgent(Vector3 initialPosition)
     {
+        navMeshAgent.enabled = false;
         transform.position = initialPosition;
+        navMeshAgent.enabled = true;
+        currentHP = Data.MaxHP;
     }
 
     public float ComputeScore()
@@ -59,12 +64,82 @@ public class Agent : MonoBehaviour
         Data = new AgentData();
     }
 
-    /// <summary>
-    /// Called each frame.
-    /// </summary>
     private void Update()
     {
-        
+        Debug.LogWarning("TODO : Check if game is running");
+        //if(!ComabatManager.Instance.IsGameRunning)
+        //  return;
+
+        if (target == null || !target.IsAlive)
+        {
+            target = GetClosestEnemyAgent();
+
+            if (target == null)
+                return;
+        }
+
+        if (IsTargetInAttackRange(target))
+        {
+            navMeshAgent.SetDestination(transform.position);
+            AttackBehaviour();
+        }
+        else
+        {
+            //switch target if another one is closer
+            Agent newPotentialTarget = GetClosestEnemyAgent();
+
+            if (newPotentialTarget != null)
+            {
+                target = newPotentialTarget;
+            }
+
+            navMeshAgent.SetDestination(target.transform.position);
+        }
+    }
+
+    void AttackBehaviour()
+    {
+        //TODO KILL CALLBACK
+
+        if (Time.time > nextAllowedAttackTime)
+        {
+            target.OnAttacked(this);
+            nextAllowedAttackTime = Time.time + 1 / Data.AttackSpeed;
+        }
+    }
+
+    bool DodgeAttack(float precision, float evasiveness)
+    {
+        float random = UnityEngine.Random.Range(0f, 1f);
+
+        float dodgeChance = (Mathf.Sqrt(evasiveness) / (Mathf.Sqrt(evasiveness) * 1.4f * Mathf.Sqrt(precision))) * 1.25f;
+
+        return random < dodgeChance;
+    }
+
+    private void OnAttacked(Agent attackingAgent)
+    {
+        if (DodgeAttack(attackingAgent.Data.Precision, Data.Evasiveness))
+        {
+            Debug.Log("Dodged the attack !");
+            return;
+        }
+
+        float inflictedDamage = 0;
+
+        inflictedDamage += attackingAgent.Data.Attack / (Data.Defense + 1);
+
+        attackingAgent.TotalDamageInflicted += inflictedDamage;
+
+        currentHP -= inflictedDamage;
+
+        if (currentHP <= 0)
+        {
+            attackingAgent.KillAmount++;
+            IsAlive = false;
+            OnDeath?.Invoke();
+            gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -84,40 +159,40 @@ public class Agent : MonoBehaviour
         Collider[] allObjectsOverlapingWithAgent = Physics.OverlapSphere(transform.position, overlapingSphereRadius);
         Agent closestEnemy = null;
         //Arbitrary large value
-        float currentMinDist = 1000;
+        float currentMinDist = float.MaxValue;
+
         //If we found objects in 
-        if(allObjectsOverlapingWithAgent.Length != 0)
+        foreach (Collider overlapingCollider in allObjectsOverlapingWithAgent)
         {
-            foreach (Collider overlapingCollider in allObjectsOverlapingWithAgent)
+            Agent agent = overlapingCollider.GetComponent<Agent>();
+
+            if (agent == null)
             {
-                if (overlapingCollider.gameObject.GetComponent<Agent>() == null)
+                continue;
+            }
+            else
+            {
+                if (agent.teamIndex == teamIndex)
                 {
                     continue;
                 }
                 else
                 {
-                    if (overlapingCollider.gameObject.GetComponent<Agent>().teamIndex == teamIndex)
+                    float distanceToCurrentEnemy = Distance(this.gameObject, overlapingCollider.gameObject);
+                    if (distanceToCurrentEnemy < currentMinDist)
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        float distanceToCurrentEnemy = Distance(this.gameObject, overlapingCollider.gameObject);
-                        if (distanceToCurrentEnemy < currentMinDist)
-                        {
-                            currentMinDist = distanceToCurrentEnemy;
-                            closestEnemy = overlapingCollider.gameObject.GetComponent<Agent>();
-                        }
+                        currentMinDist = distanceToCurrentEnemy;
+                        closestEnemy = agent;
                     }
                 }
-
             }
         }
+
         //If there were only obstacles or allies in the radius || radius did not find any object
         //List < List < Agent >> teams = new List<List<Agent>>();
-        if ( closestEnemy == null ) 
+        if (closestEnemy == null)
         {
-            for(int i = 0; i < CombatManager.Instance.teams.Count; i++)
+            for (int i = 0; i < CombatManager.Instance.teams.Count; i++)
             {
                 if (i == teamIndex) continue;
                 else
@@ -140,7 +215,7 @@ public class Agent : MonoBehaviour
                     }
                 }
             }
-            
+
         }
         return closestEnemy;
     }
@@ -153,5 +228,10 @@ public class Agent : MonoBehaviour
     float Distance(GameObject a, GameObject b)
     {
         return (a.transform.position - b.transform.position).sqrMagnitude;
+    }
+
+    bool IsTargetInAttackRange(Agent target)
+    {
+        return (target.transform.position - transform.position).magnitude <= Data.AttackDistance;
     }
 }
