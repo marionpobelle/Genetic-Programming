@@ -13,7 +13,7 @@ public class Agent : MonoBehaviour
     [SerializeField] float aliveScoreMultiplier = 1;
     [SerializeField] Renderer agentRenderer;
     public int teamIndex;
-    AgentData data;
+    public AgentData Data;
     NavMeshAgent navMesh;
 
     float currentHP;
@@ -22,7 +22,7 @@ public class Agent : MonoBehaviour
 
     public float TotalDamageInflicted = 0.0f;
     public int KillAmount = 0;
-    public float LifeTime = 0.0f;
+    public float PercentageAliveInGame = 0.0f;
 
     public static event Action OnHit;
     public static event Action OnDeath;
@@ -48,12 +48,7 @@ public class Agent : MonoBehaviour
 
     public float ComputeScore()
     {
-        Debug.Log("TODO : COMPUTE SCORE");
-
-        //function should be something like :
-        // return kills * killscoreMultiplier + percentageAliveInGame * aliveScoreMultiplier + totalInflictedDamage * damageScoreMultiplier;
-
-        return 0;
+        return KillAmount * killScoreMultiplier + PercentageAliveInGame * aliveScoreMultiplier + TotalDamageInflicted * damageScoreMultiplier;
     }
 
     /// <summary>
@@ -61,7 +56,7 @@ public class Agent : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        data = new AgentData();
+        Data = new AgentData();
     }
 
     /// <summary>

@@ -28,10 +28,8 @@ public class CombatManager : MonoBehaviour
                 agent.InitAgent(GetRandomArenaPosition());
             }
         }
-
-        Debug.LogWarning("TODO : SUBSCRIBE TO ON DEATH EVENT");
         //subscribe to agent death to check for fight over
-        //agent.OnDeath += OnAgentDeath;
+        Agent.OnDeath += OnAgentDeath;
     }
 
     void OnAgentDeath()
@@ -41,15 +39,14 @@ public class CombatManager : MonoBehaviour
         {
             foreach (Agent agent in team)
             {
-                Debug.LogWarning("Add Check For Alive");
-                //if (agent.isAlive)
+                if (agent.IsAlive)
                 {
                     teamsWithLivingPlayerAlive++;
                     break;
                 }
             }
 
-            if (teamsWithLivingPlayerAlive > 1)
+            if (teamsWithLivingPlayerAlive <= 1)
             {
                 EndFight();
                 return;
@@ -75,8 +72,7 @@ public class CombatManager : MonoBehaviour
 
         foreach (Agent agent in team)
         {
-            Debug.LogWarning("TODO : COMPUTE AGENT SCORE");
-            //teamScore.Add(new(agent.ComputeScore(), agent.Data));
+            teamScore.Add(new(agent.ComputeScore(), agent.Data));
         }
 
         return teamScore;
