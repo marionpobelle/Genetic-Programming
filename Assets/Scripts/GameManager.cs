@@ -46,6 +46,13 @@ public class GameManager : MonoBehaviour
 
     void OnFightOver(List<List<ValueTuple<float, AgentData>>> teamsPerformances)
     {
+        foreach (var perf in teamsPerformances)
+        {
+            combatManager.UpdateTeamStrategy(teamsPerformances.IndexOf(perf), shuffler.GetBestBuilds(perf));
+        }
 
+        combatManager.ResetAllAgents();
+
+        StartFight();
     }
 }

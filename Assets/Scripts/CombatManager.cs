@@ -11,6 +11,9 @@ public class CombatManager : MonoBehaviour
 
     public List<List<Agent>> teams = new List<List<Agent>>();
 
+    float fightStartTime;
+    float fightEndTime;
+
     //BUG: Draw event stuff
     float lastOnHitTime;
     //BUG: Draw event stuff
@@ -50,7 +53,7 @@ public class CombatManager : MonoBehaviour
         //BUG: Draw event stuff
         lastOnHitTime = Time.time;
         Agent.OnHit += OnAgentHit;
-        
+        fightStartTime = Time.time;
     }
 
     //BUG: Draw event stuff
@@ -101,8 +104,11 @@ public class CombatManager : MonoBehaviour
     {
         isFightRunning = false;
 
-        List<List<ValueTuple<float, AgentData>>> teamsScores = new List<List<(float, AgentData)>>();
+        fightEndTime = Time.time;
 
+        //compute scores
+        List<List<ValueTuple<float, AgentData>>> teamsScores = new List<List<(float, AgentData)>>();
+        
         foreach (List<Agent> team in teams)
         {
             teamsScores.Add(GetTeamScore(team));
@@ -128,5 +134,37 @@ public class CombatManager : MonoBehaviour
     private Vector3 GetRandomArenaPosition()
     {
         return new Vector3(UnityEngine.Random.Range(-arenaDimension, arenaDimension), 0, UnityEngine.Random.Range(-arenaDimension, arenaDimension));
+    }
+
+    public float ComputeDeathLifetimePercentage(float deathTime)
+    {
+        return 100 * Mathf.InverseLerp(fightStartTime, fightEndTime, deathTime);
+    }
+
+    public void ResetAllAgents()
+    {
+        foreach (List<Agent> team in teams)
+        {
+            foreach (Agent agent in team)
+            {
+                agent.InitAgent(GetRandomArenaPosition());
+            }
+        }
+    }
+
+    public void UpdateTeamStrategy(int teamIndex, List<ValueTuple<float, AgentData>> possibleBuilds)
+    {
+        foreach (Agent agent in teams[teamIndex])
+        {
+            //one random strategy per team
+            if (teams[teamIndex].IndexOf(agent) == 0)
+            {
+                agent.InitAgent(GetRandomArenaPosition());
+                continue;
+            }
+
+            int chosenStrategy = UnityEngine.Random.Range(0, possibleBuilds.Count);
+            agent.UpdateData(possibleBuilds[chosenStrategy].Item2, possibleBuilds[chosenStrategy].Item1);
+        }
     }
 }

@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StatsShuffler : MonoBehaviour
 {
     [SerializeField] int maxPointsToGive = 100;
+    [SerializeField] float bestBuildToKeepPercentage = 10;
     public AgentData GetRandomData()
     {
         AgentData data = new AgentData();
@@ -74,5 +76,21 @@ public class StatsShuffler : MonoBehaviour
         }
 
         return data;
+    }
+
+    public List<ValueTuple<float, AgentData>> GetBestBuilds(List<ValueTuple<float, AgentData>> allBuilds)
+    {
+        List<ValueTuple<float, AgentData>> bestBuilds = new List<(float, AgentData)>();
+
+        allBuilds = allBuilds.OrderBy(s => s.Item1).ToList();
+
+        int buildsAmountToReturn = Mathf.CeilToInt(allBuilds.Count / bestBuildToKeepPercentage);
+
+        for (int i = 0; i < buildsAmountToReturn; i++)
+        {
+            bestBuilds.Add(allBuilds[allBuilds.Count - (1 + i)]);
+        }
+
+        return bestBuilds;
     }
 }

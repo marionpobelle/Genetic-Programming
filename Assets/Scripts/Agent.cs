@@ -12,8 +12,9 @@ public class Agent : MonoBehaviour
     [SerializeField] float damageScoreMultiplier = 1;
     [SerializeField] float aliveScoreMultiplier = 1;
     [SerializeField] Renderer agentRenderer;
-    public int teamIndex;
     [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] float overlapingSphereRadius;
+    public int teamIndex;
     public AgentData Data;
 
     float currentHP;
@@ -22,13 +23,12 @@ public class Agent : MonoBehaviour
 
     public float TotalDamageInflicted = 0.0f;
     public int KillAmount = 0;
-    public float PercentageAliveInGame = 0.0f;
 
     float nextAllowedAttackTime = 0;
+    float deathTime = -1;
 
     public static event Action OnHit;
     public static event Action OnDeath;
-    [SerializeField] float overlapingSphereRadius;
 
 
     /// <summary>
@@ -46,21 +46,33 @@ public class Agent : MonoBehaviour
     /// </summary>
     public void InitAgent(Vector3 initialPosition)
     {
+        IsAlive = true;
+        gameObject.SetActive(true);
+        TotalDamageInflicted = 0;
+        KillAmount = 0;
+        deathTime = -1;
         navMeshAgent.enabled = false;
         transform.position = initialPosition;
         navMeshAgent.enabled = true;
         currentHP = Data.MaxHP;
     }
 
+    public void UpdateData(AgentData newData, float buildFitness)
+    {
+        Data = new AgentData(newData, buildFitness);
+    }
+
     public float ComputeScore()
     {
-        return KillAmount * killScoreMultiplier + PercentageAliveInGame * aliveScoreMultiplier + TotalDamageInflicted * damageScoreMultiplier;
+        return KillAmount * killScoreMultiplier
+            + ((deathTime < 0) ? 100 : CombatManager.Instance.ComputeDeathLifetimePercentage(deathTime)) * aliveScoreMultiplier
+            + TotalDamageInflicted * damageScoreMultiplier;
     }
 
     private void Update()
     {
-        if(!CombatManager.Instance.IsFightRunning)
-          return;
+        if (!CombatManager.Instance.IsFightRunning)
+            return;
 
         if (target == null || !target.IsAlive)
         {
@@ -113,16 +125,17 @@ public class Agent : MonoBehaviour
     {
         if (DodgeAttack(attackingAgent.Data.Precision, Data.Evasiveness))
         {
-          //  Debug.Log("Dodged the attack !");
+            //  Debug.Log("Dodged the attack !");
             return;
         }
         //BUG: Draw event stuff
-        Debug.Log("Agent got hit !");
         OnHit?.Invoke();
 
         float inflictedDamage = 0;
 
         inflictedDamage = Mathf.Max(1, attackingAgent.Data.Attack / (Data.Defense + 1));
+
+        Debug.Log($"Agent got hit for {inflictedDamage}", this);
 
         attackingAgent.TotalDamageInflicted += inflictedDamage;
 

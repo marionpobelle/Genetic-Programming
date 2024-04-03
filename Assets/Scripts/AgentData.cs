@@ -34,4 +34,96 @@ public class AgentData
     public float AttackDistance => baseAttackDistance + AdditionalAttackDistancePoints * multiplierAttackDistance;
 
     public int StatsTotal => AdditionalHPPoints + AdditionalAttackPoints + AdditionalDefensePoints + AdditionalEvasivenessPoints + AdditionalPrecisionPoints + AdditionalAttackSpeedPoints +AdditionalAttackDistancePoints;
+
+
+    /// <summary>
+    /// constructor used to shuffle
+    /// </summary>
+    public AgentData(AgentData newData, float buildFitness)
+    {
+        AdditionalHPPoints = newData.AdditionalHPPoints;
+        AdditionalAttackPoints = newData.AdditionalAttackPoints;
+        AdditionalDefensePoints = newData.AdditionalDefensePoints;
+        AdditionalEvasivenessPoints = newData.AdditionalEvasivenessPoints;
+        AdditionalPrecisionPoints = newData.AdditionalPrecisionPoints;
+        AdditionalAttackSpeedPoints = newData.AdditionalAttackSpeedPoints;
+        AdditionalAttackDistancePoints = newData.AdditionalAttackDistancePoints;
+
+        int pointsToShuffle = Mathf.CeilToInt(Mathf.Lerp(60,5, Mathf.InverseLerp(0,300,buildFitness)));
+
+        while (pointsToShuffle > 0)
+        {
+            pointsToShuffle--;
+
+            int random = UnityEngine.Random.Range(0, 7);
+
+            switch (random)
+            {
+                case 0:
+                    if (AdditionalHPPoints > 0)
+                        continue;
+                    AdditionalHPPoints--;
+                    break;
+                case 1:
+                    if (AdditionalAttackPoints > 0)
+                        continue;
+                    AdditionalAttackPoints--;
+                    break;
+                case 2:
+                    if (AdditionalDefensePoints > 0)
+                        continue;
+                    AdditionalDefensePoints--;
+                    break;
+                case 3:
+                    if (AdditionalPrecisionPoints > 0)
+                        continue;
+                    AdditionalPrecisionPoints--;
+                    break;
+                case 4:
+                    if (AdditionalEvasivenessPoints > 0)
+                        continue;
+                    AdditionalEvasivenessPoints--;
+                    break;
+                case 5:
+                    if (AdditionalAttackSpeedPoints > 0)
+                        continue;
+                    AdditionalAttackSpeedPoints--;
+                    break;
+                case 6:
+                    if (AdditionalAttackDistancePoints > 0)
+                        continue;
+                    AdditionalAttackDistancePoints--;
+                    break;
+            }
+
+            random = UnityEngine.Random.Range(0, 7);
+
+            switch (random)
+            {
+                case 0:
+                    AdditionalHPPoints++;
+                    break;
+                case 1:
+                    AdditionalAttackPoints++;
+                    break;
+                case 2:
+                    AdditionalDefensePoints++;
+                    break;
+                case 3:
+                    AdditionalPrecisionPoints++;
+                    break;
+                case 4:
+                    AdditionalEvasivenessPoints++;
+                    break;
+                case 5:
+                    AdditionalAttackSpeedPoints++;
+                    break;
+                case 6:
+                    AdditionalAttackDistancePoints++;
+                    break;
+            }
+        }
+    }
+
+    public AgentData() { }
 }
