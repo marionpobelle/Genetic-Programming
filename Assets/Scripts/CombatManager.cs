@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -9,6 +10,11 @@ public class CombatManager : MonoBehaviour
     Action<List<List<ValueTuple<float, AgentData>>>> fightOverCallback;
 
     public List<List<Agent>> teams = new List<List<Agent>>();
+
+    //BUG: Draw event stuff
+    float lastOnHitTime;
+    //BUG: Draw event stuff
+    float maxTimeBetweenOnHits = 60.0f;
 
     public static CombatManager Instance;
 
@@ -33,8 +39,30 @@ public class CombatManager : MonoBehaviour
                 agent.InitAgent(GetRandomArenaPosition());
             }
         }
-        //subscribe to agent death to check for fight over
+        //Subscribe to agent death to check for fight over
         Agent.OnDeath += OnAgentDeath;
+        //Subscribe to agent hit to check for draws
+        //BUG: Draw event stuff
+        lastOnHitTime = Time.time;
+        Agent.OnHit += OnAgentHit;
+        
+    }
+
+    //BUG: Draw event stuff
+    private void OnAgentHit()
+    {
+        Debug.Log("Calling OnAgentHit!");
+        lastOnHitTime = Time.time;
+    }
+
+    private void Update()
+    {
+        //BUG: Draw event stuff
+        if (Mathf.Abs(lastOnHitTime - Time.time) >= maxTimeBetweenOnHits)
+        {
+            Debug.Log("Hit cooldown reach ! Calling EndFight");
+            EndFight();
+        }
     }
 
     void OnAgentDeath()
@@ -69,6 +97,7 @@ public class CombatManager : MonoBehaviour
         }
 
         Agent.OnDeath -= OnAgentDeath;
+        Agent.OnHit -= OnAgentHit;
         fightOverCallback?.Invoke(teamsScores);
     }
 

@@ -121,9 +121,12 @@ public class Agent : MonoBehaviour
     {
         if (DodgeAttack(attackingAgent.Data.Precision, Data.Evasiveness))
         {
-            Debug.Log("Dodged the attack !");
+          //  Debug.Log("Dodged the attack !");
             return;
         }
+        //BUG: Draw event stuff
+        Debug.Log("Agent got hit !");
+        OnHit?.Invoke();
 
         float inflictedDamage = 0;
 
