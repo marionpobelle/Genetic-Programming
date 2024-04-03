@@ -34,10 +34,11 @@ public class Agent : MonoBehaviour
     /// <summary>
     /// Called when the agent is instantiated.
     /// </summary>
-    public void SetupAgent(int teamIndex, Material teamMaterial)
+    public void SetupAgent(int teamIndex, Material teamMaterial, AgentData newData)
     {
         this.teamIndex = teamIndex;
         agentRenderer.material = teamMaterial;
+        Data = newData;
     }
 
     /// <summary>
@@ -54,14 +55,6 @@ public class Agent : MonoBehaviour
     public float ComputeScore()
     {
         return KillAmount * killScoreMultiplier + PercentageAliveInGame * aliveScoreMultiplier + TotalDamageInflicted * damageScoreMultiplier;
-    }
-
-    /// <summary>
-    /// Sets up the agent stats.
-    /// </summary>
-    private void Awake()
-    {
-        Data = new AgentData();
     }
 
     private void Update()

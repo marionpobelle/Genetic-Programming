@@ -32,4 +32,6 @@ public class AgentData
     public int Precision => basePrecision + AdditionalPrecisionPoints;
     public int AttackSpeed => baseAttackSpeed + AdditionalAttackSpeedPoints;
     public float AttackDistance => baseAttackDistance + AdditionalAttackDistancePoints * multiplierAttackDistance;
+
+    public int StatsTotal => AdditionalHPPoints + AdditionalAttackPoints + AdditionalDefensePoints + AdditionalEvasivenessPoints + AdditionalPrecisionPoints + AdditionalAttackSpeedPoints +AdditionalAttackDistancePoints;
 }

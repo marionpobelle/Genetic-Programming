@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Needed Variables")]
     [SerializeField] CombatManager combatManager;
+    [SerializeField] StatsShuffler shuffler;
 
 
     void Awake()
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour
             {
                 Agent agent = Instantiate(agentPrefab, teamParent.transform);
 
-                agent.SetupAgent(teamIndex, teamMaterial);
+                agent.SetupAgent(teamIndex, teamMaterial, shuffler.GetRandomData());
 
                 newAgentTeam.Add(agent);
             }
