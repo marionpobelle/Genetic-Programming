@@ -20,13 +20,14 @@ public class GameManager : MonoBehaviour
         for (int teamIndex = 0; teamIndex < teamAmount; teamIndex++)
         {
             List<Agent> newAgentTeam = new List<Agent>();
+            GameObject teamParent = new GameObject($"Team_{teamIndex.ToString("D2")}");
+            Material teamMaterial = (teamIndex >= teamMaterials.Count) ? teamMaterials[0] : teamMaterials[teamIndex];
 
-            Material teamMaterial = (teamMaterials.Count >= teamIndex) ? teamMaterials[0] : teamMaterials[teamIndex];
             for (int agentIndex = 0; agentIndex < teamPopulation; agentIndex++)
             {
-                Agent agent = Instantiate(agentPrefab);
+                Agent agent = Instantiate(agentPrefab, teamParent.transform);
 
-                agent.SetupAgent(teamMaterial);
+                agent.SetupAgent(teamIndex, teamMaterial);
 
                 newAgentTeam.Add(agent);
             }
@@ -39,10 +40,10 @@ public class GameManager : MonoBehaviour
 
     void StartFight()
     {
-        combatManager.StartFight();
+        combatManager.StartFight(OnFightOver);
     }
 
-    void OnFightOver()
+    void OnFightOver(List<List<ValueTuple<float, AgentData>>> teamsPerformances)
     {
 
     }
