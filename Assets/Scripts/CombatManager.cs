@@ -8,7 +8,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField] float arenaDimension;
     Action<List<List<ValueTuple<float, AgentData>>>> fightOverCallback;
 
-    List<List<Agent>> teams = new List<List<Agent>>();
+    public List<List<Agent>> teams = new List<List<Agent>>();
+
+    public static CombatManager Instance;
 
     public void AddTeam(List<Agent> newTeam)
     {

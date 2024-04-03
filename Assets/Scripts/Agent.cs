@@ -17,7 +17,7 @@ public class Agent : MonoBehaviour
     NavMeshAgent navMesh;
 
     float currentHP;
-    public bool isAlive;
+    public bool IsAlive;
     Agent target;
 
     public float TotalDamageInflicted = 0.0f;
@@ -34,7 +34,7 @@ public class Agent : MonoBehaviour
     /// </summary>
     public void SetupAgent(int teamIndex, Material teamMaterial)
     {
-        Debug.LogWarning("TODO : SET TEAM INDEX");
+        this.teamIndex = teamIndex;
         agentRenderer.material = teamMaterial;
     }
 
@@ -84,9 +84,7 @@ public class Agent : MonoBehaviour
     /// <summary>
     /// Get the closest enemy agent to this agent.
     /// </summary>
-    /// <param name="allActiveAgents"></param>
-    //TODO: List of all active agents for distance comparison if nobody is in the radius
-    Agent GetClosestEnemyAgent(Agent[] allActiveAgents)
+    Agent GetClosestEnemyAgent()
     {
         Collider[] allObjectsOverlapingWithAgent = Physics.OverlapSphere(transform.position, overlapingSphereRadius);
         Agent closestEnemy = null;
@@ -121,24 +119,33 @@ public class Agent : MonoBehaviour
             }
         }
         //If there were only obstacles or allies in the radius || radius did not find any object
-        if( closestEnemy == null ) 
+        //List < List < Agent >> teams = new List<List<Agent>>();
+        if ( closestEnemy == null ) 
         {
-            foreach(Agent agent in allActiveAgents)
+            for(int i = 0; i < CombatManager.Instance.teams.Count; i++)
             {
-                if (agent.teamIndex == teamIndex)
-                {
-                    continue;
-                }
+                if (i == teamIndex) continue;
                 else
                 {
-                    float distanceToCurrentEnemy = Distance(this.gameObject, agent.gameObject);
-                    if (distanceToCurrentEnemy < currentMinDist)
+                    foreach (Agent agent in CombatManager.Instance.teams[i])
                     {
-                        currentMinDist = distanceToCurrentEnemy;
-                        closestEnemy = agent;
+                        if (agent.IsAlive == false)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            float distanceToCurrentEnemy = Distance(this.gameObject, agent.gameObject);
+                            if (distanceToCurrentEnemy < currentMinDist)
+                            {
+                                currentMinDist = distanceToCurrentEnemy;
+                                closestEnemy = agent;
+                            }
+                        }
                     }
                 }
             }
+            
         }
         return closestEnemy;
     }
@@ -150,6 +157,6 @@ public class Agent : MonoBehaviour
     /// /// <param name="b"></param>
     float Distance(GameObject a, GameObject b)
     {
-        return (a.transform.position - b.transform.position).magnitude;
+        return (a.transform.position - b.transform.position).sqrMagnitude;
     }
 }
