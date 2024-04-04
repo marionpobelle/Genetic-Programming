@@ -26,10 +26,13 @@ public class FlyCamera : MonoBehaviour {
 
 	void Update() {
 		// Input
+		if(Input.GetKeyDown(KeyCode.LeftShift))
+			Focused = false;
+		if(Input.GetKeyUp(KeyCode.LeftShift))
+			Focused = true;
+
 		if( Focused )
 			UpdateInput();
-		else if( Input.GetMouseButtonDown( 0 ) )
-			Focused = true;
 
 		// Physics
 		velocity = Vector3.Lerp( velocity, Vector3.zero, dampingCoefficient * Time.deltaTime );
@@ -68,7 +71,7 @@ public class FlyCamera : MonoBehaviour {
 		AddMovement( KeyCode.LeftControl, Vector3.down );
 		Vector3 direction = transform.TransformVector( moveInput.normalized );
 
-		if( Input.GetKey( KeyCode.LeftShift ) )
+		if( Input.GetKey( KeyCode.LeftAlt ) )
 			return direction * ( acceleration * accSprintMultiplier ); // "sprinting"
 		return direction * acceleration; // "walking"
 	}

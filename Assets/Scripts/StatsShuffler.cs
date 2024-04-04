@@ -39,13 +39,13 @@ public class StatsShuffler : MonoBehaviour
         data.AdditionalEvasivenessPoints = evaPoints;
 
         int atkSpeedPoints = Mathf.FloorToInt(maxPointsToGive * Mathf.InverseLerp(0, proportionsTotal, attackSpeedProportion));
-        data.AdditionalAttackSpeedPoints = atkSpeedPoints;
+        data.AdditionalSpeedPoints = atkSpeedPoints;
 
         int distPoints = Mathf.FloorToInt(maxPointsToGive * Mathf.InverseLerp(0, proportionsTotal, attackDistanceProportion));
         data.AdditionalAttackDistancePoints = distPoints;
 
         //in case we didn't fill up to 100 points
-        while (data.StatsTotal < 100)
+        while (data.StatsTotal < maxPointsToGive)
         {
             int random = UnityEngine.Random.Range(0, 7);
 
@@ -67,7 +67,7 @@ public class StatsShuffler : MonoBehaviour
                     data.AdditionalEvasivenessPoints++;
                     break;
                 case 5:
-                    data.AdditionalAttackSpeedPoints++;
+                    data.AdditionalSpeedPoints++;
                     break;
                 case 6:
                     data.AdditionalAttackDistancePoints++;

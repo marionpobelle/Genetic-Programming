@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class StatPanelDisplayHandler : MonoBehaviour
 {
+    Camera mainCamera;
     List<Agent> allAgents;
     int displayAgentIndex = 0;
 
+    [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] TextMeshProUGUI Teamtxt;
     [SerializeField] TextMeshProUGUI MaxHPtxt;
     [SerializeField] TextMeshProUGUI Attacktxt;
@@ -23,6 +25,7 @@ public class StatPanelDisplayHandler : MonoBehaviour
 
     private void Start()
     {
+        mainCamera = Camera.main;
         allAgents = new List<Agent>();
         for (int i = 0; i < CombatManager.Instance.teams.Count; i++) 
         { 
@@ -33,6 +36,7 @@ public class StatPanelDisplayHandler : MonoBehaviour
         }
         SetStatsPanel(allAgents[0]);
         displayAgentIndex = 0;
+        Toggle(false);
     }
 
     void SetStatsPanel(Agent agent)
@@ -44,7 +48,7 @@ public class StatPanelDisplayHandler : MonoBehaviour
         Defensetxt.SetText("Def : " + agent.Data.Defense);
         Evasivenesstxt.SetText("Evs : " + agent.Data.Evasiveness);
         Precisiontxt.SetText("Pre : " + agent.Data.Precision);
-        AttackSpeedtxt.SetText("Atk Speed : " + agent.Data.AttackSpeed);
+        AttackSpeedtxt.SetText("Atk Speed : " + agent.Data.Speed);
         AttackDistancetxt.SetText("Atk Dist : " + agent.Data.AttackDistance);
 
         Killtxt.SetText("Kills : " + agent.KillAmount);
@@ -53,6 +57,23 @@ public class StatPanelDisplayHandler : MonoBehaviour
 
     private void Update()
     {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Agent agent = hit.collider.GetComponent<Agent>();
+            if (agent != null && agent.IsAlive && allAgents.Contains(agent))
+            {
+                displayAgentIndex = allAgents.IndexOf(agent);
+                Toggle(true);
+            }
+            else if (Input.GetMouseButtonDown(0))
+                Toggle(false);
+        }
+        else if (Input.GetMouseButtonDown(0))
+                Toggle(false);
+
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             displayAgentIndex -= 1;
@@ -75,7 +96,7 @@ public class StatPanelDisplayHandler : MonoBehaviour
                 if (displayAgentIndex >= allAgents.Count) displayAgentIndex = 0;
             }
         }
-        Debug.Log(" allAgents.Count : " + allAgents.Count + "display Index : " + displayAgentIndex);
+
         if (allAgents[displayAgentIndex].IsAlive == false)
         {
             while (allAgents[displayAgentIndex].IsAlive == false)
@@ -89,6 +110,11 @@ public class StatPanelDisplayHandler : MonoBehaviour
         SetStatsPanel(allAgents[displayAgentIndex]);
     }
 
+
+    void Toggle(bool show)
+    {
+        canvasGroup.alpha = show ? 1 : 0;
+    }
 }
 
 

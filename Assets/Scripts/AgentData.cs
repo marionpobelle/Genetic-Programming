@@ -7,11 +7,11 @@ using UnityEngine;
 public class AgentData
 {
     int baseMaxHP = 100;
-    int baseAttack = 5;
+    int baseAttack = 10;
     int baseDefense = 1;
     int baseEvasiveness = 1;
     int basePrecision = 5;
-    int baseAttackSpeed = 1;
+    int baseSpeed = 5;
     float baseAttackDistance = 1;
 
     public int AdditionalHPPoints = 0;
@@ -19,21 +19,21 @@ public class AgentData
     public int AdditionalDefensePoints = 0;
     public int AdditionalEvasivenessPoints = 0;
     public int AdditionalPrecisionPoints = 0;
-    public int AdditionalAttackSpeedPoints = 0;
+    public int AdditionalSpeedPoints = 0;
     public int AdditionalAttackDistancePoints = 0;
 
     int multiplierHP = 3;
-    float multiplierAttackDistance = 0.5f;
+    float multiplierAttackDistance = 0.1f;
 
     public int MaxHP => baseMaxHP + AdditionalHPPoints * multiplierHP;
     public int Attack => baseAttack + AdditionalAttackPoints;
     public int Defense => baseDefense + AdditionalDefensePoints;
     public int Evasiveness => baseEvasiveness + AdditionalEvasivenessPoints;
     public int Precision => basePrecision + AdditionalPrecisionPoints;
-    public int AttackSpeed => baseAttackSpeed + AdditionalAttackSpeedPoints;
+    public int Speed => baseSpeed + AdditionalSpeedPoints;
     public float AttackDistance => baseAttackDistance + AdditionalAttackDistancePoints * multiplierAttackDistance;
 
-    public int StatsTotal => AdditionalHPPoints + AdditionalAttackPoints + AdditionalDefensePoints + AdditionalEvasivenessPoints + AdditionalPrecisionPoints + AdditionalAttackSpeedPoints +AdditionalAttackDistancePoints;
+    public int StatsTotal => AdditionalHPPoints + AdditionalAttackPoints + AdditionalDefensePoints + AdditionalEvasivenessPoints + AdditionalPrecisionPoints + AdditionalSpeedPoints +AdditionalAttackDistancePoints;
 
 
     /// <summary>
@@ -46,14 +46,13 @@ public class AgentData
         AdditionalDefensePoints = newData.AdditionalDefensePoints;
         AdditionalEvasivenessPoints = newData.AdditionalEvasivenessPoints;
         AdditionalPrecisionPoints = newData.AdditionalPrecisionPoints;
-        AdditionalAttackSpeedPoints = newData.AdditionalAttackSpeedPoints;
+        AdditionalSpeedPoints = newData.AdditionalSpeedPoints;
         AdditionalAttackDistancePoints = newData.AdditionalAttackDistancePoints;
 
-        int pointsToShuffle = Mathf.CeilToInt(Mathf.Lerp(60,5, Mathf.InverseLerp(0,300,buildFitness)));
+        int pointsToShuffle = Mathf.CeilToInt(Mathf.Lerp(60,5, Mathf.InverseLerp(0,700,buildFitness)));
 
         while (pointsToShuffle > 0)
         {
-            pointsToShuffle--;
 
             int random = UnityEngine.Random.Range(0, 7);
 
@@ -85,9 +84,9 @@ public class AgentData
                     AdditionalEvasivenessPoints--;
                     break;
                 case 5:
-                    if (AdditionalAttackSpeedPoints <= 0)
+                    if (AdditionalSpeedPoints <= 0)
                         continue;
-                    AdditionalAttackSpeedPoints--;
+                    AdditionalSpeedPoints--;
                     break;
                 case 6:
                     if (AdditionalAttackDistancePoints <= 0)
@@ -116,12 +115,13 @@ public class AgentData
                     AdditionalEvasivenessPoints++;
                     break;
                 case 5:
-                    AdditionalAttackSpeedPoints++;
+                    AdditionalSpeedPoints++;
                     break;
                 case 6:
                     AdditionalAttackDistancePoints++;
                     break;
             }
+            pointsToShuffle--;
         }
     }
 

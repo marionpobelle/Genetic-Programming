@@ -52,6 +52,8 @@ public class Agent : MonoBehaviour
         KillAmount = 0;
         deathTime = -1;
         navMeshAgent.enabled = false;
+        initialPosition.x = (teamIndex == 0 || teamIndex == 2) ? Mathf.Abs(initialPosition.x) : -Mathf.Abs(initialPosition.x);
+        //initialPosition.z = (teamIndex == 0 || teamIndex == 1) ? Mathf.Abs(initialPosition.z) : -Mathf.Abs(initialPosition.z);
         transform.position = initialPosition;
         navMeshAgent.enabled = true;
         currentHP = Data.MaxHP;
@@ -60,11 +62,12 @@ public class Agent : MonoBehaviour
     public void UpdateData(AgentData newData, float buildFitness)
     {
         Data = new AgentData(newData, buildFitness);
+        navMeshAgent.speed = Data.Speed;
     }
 
     public float ComputeScore()
     {
-        return KillAmount * killScoreMultiplier
+        return //KillAmount * killScoreMultiplier
             + ((deathTime < 0) ? 100 : CombatManager.Instance.ComputeDeathLifetimePercentage(deathTime)) * aliveScoreMultiplier
             + TotalDamageInflicted * damageScoreMultiplier;
     }
@@ -108,7 +111,7 @@ public class Agent : MonoBehaviour
         if (Time.time > nextAllowedAttackTime)
         {
             target.OnAttacked(this);
-            nextAllowedAttackTime = Time.time + 1 / Data.AttackSpeed;
+            nextAllowedAttackTime = Time.time + .05f;
         }
     }
 

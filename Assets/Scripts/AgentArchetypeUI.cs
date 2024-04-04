@@ -21,7 +21,7 @@ public class AgentArchetypeUI : MonoBehaviour
         defSlider.value = score.Item2.AdditionalDefensePoints;
         precSlider.value = score.Item2.AdditionalPrecisionPoints;
         evaSlider.value = score.Item2.AdditionalEvasivenessPoints;
-        aspSlider.value = score.Item2.AdditionalAttackSpeedPoints;
+        aspSlider.value = score.Item2.AdditionalSpeedPoints;
         araSlider.value = score.Item2.AdditionalAttackDistancePoints;
         hpSlider.value = score.Item2.AdditionalHPPoints;
     }

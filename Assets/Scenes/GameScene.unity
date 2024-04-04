@@ -1216,12 +1216,12 @@ LookAtConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: 0, y: 0, z: 0}
-  m_Roll: 180
+  m_RotationOffset: {x: 0, y: 180, z: 0}
+  m_Roll: 0
   m_WorldUpObject: {fileID: 0}
   m_UseUpObject: 0
   m_Active: 1
-  m_IsLocked: 1
+  m_IsLocked: 0
   m_Sources:
   - sourceTransform: {fileID: 963194228}
     weight: 1
@@ -2840,6 +2840,7 @@ GameObject:
   - component: {fileID: 598494942}
   - component: {fileID: 598494941}
   - component: {fileID: 598494940}
+  - component: {fileID: 598494944}
   m_Layer: 5
   m_Name: WorldUI
   m_TagString: Untagged
@@ -2930,6 +2931,18 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 540}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &598494944
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598494939}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &604384290
 GameObject:
   m_ObjectHideFlags: 0
@@ -3279,6 +3292,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentStatsWindow
       objectReference: {fileID: 0}
+    - target: {fileID: 5278812832331074685, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
+      propertyPath: m_Color.a
+      value: 0.80784315
+      objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3321,31 +3338,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.11945111
+      value: 0.00034669376
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.9928401
+      value: -0.00004091666
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.9927989
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.11979279
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -960
+      value: -960.06
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -530
+      value: -530.06
       objectReference: {fileID: 0}
     - target: {fileID: 7127564002009208382, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3359,6 +3376,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7356115128630440070, guid: 1e0512b9c48723a4c893534850ae179b, type: 3}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 598494944}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5241,7 +5262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ff9f035c47e2f42afe2ce91f026226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 50
+  acceleration: 100
   accSprintMultiplier: 4
   lookSensitivity: 1
   dampingCoefficient: 5
