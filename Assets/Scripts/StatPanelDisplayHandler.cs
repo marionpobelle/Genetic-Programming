@@ -51,13 +51,13 @@ public class StatPanelDisplayHandler : MonoBehaviour
     {
         Teamtxt.SetText("Team : " + agent.teamIndex);
 
-        MaxHPtxt.SetText("MaxHP : " + agent.Data.MaxHP);
-        Attacktxt.SetText("Atk : " + agent.Data.Attack);
-        Defensetxt.SetText("Def : " + agent.Data.Defense);
-        Evasivenesstxt.SetText("Evs : " + agent.Data.Evasiveness);
-        Precisiontxt.SetText("Pre : " + agent.Data.Precision);
-        AttackSpeedtxt.SetText("Atk Speed : " + agent.Data.Speed);
-        AttackDistancetxt.SetText("Atk Dist : " + agent.Data.AttackDistance);
+        //MaxHPtxt.SetText("MaxHP : " + agent.Data.MaxHP);
+        //Attacktxt.SetText("Atk : " + agent.Data.Attack);
+        //Defensetxt.SetText("Def : " + agent.Data.Defense);
+        //Evasivenesstxt.SetText("Evs : " + agent.Data.Evasiveness);
+        //Precisiontxt.SetText("Pre : " + agent.Data.Precision);
+        //AttackSpeedtxt.SetText("Atk Speed : " + agent.Data.Speed);
+        //AttackDistancetxt.SetText("Atk Dist : " + agent.Data.AttackDistance);
 
         Killtxt.SetText("Kills : " + agent.KillAmount);
         Damagetxt.SetText("Dmg : " + agent.TotalDamageInflicted);
