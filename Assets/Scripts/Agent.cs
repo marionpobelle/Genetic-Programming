@@ -12,6 +12,7 @@ public class Agent : MonoBehaviour
     [SerializeField] float damageScoreMultiplier = 1;
     [SerializeField] float aliveScoreMultiplier = 1;
     [SerializeField] Renderer agentRenderer;
+    [SerializeField] ParticleSystem deathParticle;
     [SerializeField] NavMeshAgent navMeshAgent;
     [SerializeField] float overlapingSphereRadius;
     public int teamIndex;
@@ -38,6 +39,7 @@ public class Agent : MonoBehaviour
     {
         this.teamIndex = teamIndex;
         agentRenderer.material = teamMaterial;
+        deathParticle.GetComponent<Renderer>().material = teamMaterial;
         Data = newData;
     }
 
@@ -46,6 +48,8 @@ public class Agent : MonoBehaviour
     /// </summary>
     public void InitAgent(Vector3 initialPosition)
     {
+        deathParticle.transform.SetParent(transform);
+        deathParticle.transform.localPosition = Vector3.up * .5f;
         IsAlive = true;
         gameObject.SetActive(true);
         TotalDamageInflicted = 0;
@@ -146,6 +150,8 @@ public class Agent : MonoBehaviour
 
         if (currentHP <= 0)
         {
+            deathParticle.transform.SetParent(null);
+            deathParticle.Play();
             attackingAgent.KillAmount++;
             IsAlive = false;
             OnDeath?.Invoke();
