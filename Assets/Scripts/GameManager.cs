@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Needed Variables")]
     [SerializeField] CombatManager combatManager;
+    [SerializeField] TeamArchetypeSummaryHandler teamUIHandler;
     [SerializeField] StatsShuffler shuffler;
 
 
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
             combatManager.AddTeam(newAgentTeam);
         }
 
+        teamUIHandler.SetupUI(teamAmount);
+
         StartFight();
     }
 
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
         foreach (var perf in teamsPerformances)
         {
             combatManager.UpdateTeamStrategy(teamsPerformances.IndexOf(perf), shuffler.GetBestBuilds(perf));
+            teamUIHandler.UpdateUI(teamsPerformances.IndexOf(perf), shuffler.GetBestBuilds(perf));
         }
 
         combatManager.ResetAllAgents();
