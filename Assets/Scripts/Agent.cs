@@ -135,7 +135,7 @@ public class Agent : MonoBehaviour
 
         inflictedDamage = Mathf.Max(1, attackingAgent.Data.Attack / (Data.Defense + 1));
 
-        Debug.Log($"Agent got hit for {inflictedDamage}", this);
+        //Debug.Log($"Agent got hit for {inflictedDamage}", this);
 
         attackingAgent.TotalDamageInflicted += inflictedDamage;
 

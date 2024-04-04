@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3774463817079892222}
   - component: {fileID: 4037624010356344637}
   - component: {fileID: 1229267159881595519}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2450395325216120410}
   - component: {fileID: 8112009960218576900}
   - component: {fileID: 8524793319919411715}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Agent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,13 +157,20 @@ MonoBehaviour:
   damageScoreMultiplier: 1
   aliveScoreMultiplier: 1
   agentRenderer: {fileID: 1229267159881595519}
-  teamIndex: 0
   navMeshAgent: {fileID: 2450395325216120410}
+  overlapingSphereRadius: 10
+  teamIndex: 0
+  Data:
+    AdditionalHPPoints: 0
+    AdditionalAttackPoints: 0
+    AdditionalDefensePoints: 0
+    AdditionalEvasivenessPoints: 0
+    AdditionalPrecisionPoints: 0
+    AdditionalAttackSpeedPoints: 0
+    AdditionalAttackDistancePoints: 0
   IsAlive: 1
   TotalDamageInflicted: 0
   KillAmount: 0
-  LifeTime: 0
-  overlapingSphereRadius: 10
 --- !u!65 &8524793319919411715
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -196,7 +203,7 @@ GameObject:
   - component: {fileID: 2654218772154072693}
   - component: {fileID: 6071632934798152833}
   - component: {fileID: 3749119335412864456}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}

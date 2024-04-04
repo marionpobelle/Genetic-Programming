@@ -14,9 +14,7 @@ public class CombatManager : MonoBehaviour
     float fightStartTime;
     float fightEndTime;
 
-    //BUG: Draw event stuff
     float lastOnHitTime;
-    //BUG: Draw event stuff
     float maxTimeBetweenOnHits = 60.0f;
 
     public static CombatManager Instance;
@@ -50,22 +48,18 @@ public class CombatManager : MonoBehaviour
         Agent.OnDeath += OnAgentDeath;
         isFightRunning = true;
         //Subscribe to agent hit to check for draws
-        //BUG: Draw event stuff
         lastOnHitTime = Time.time;
         Agent.OnHit += OnAgentHit;
         fightStartTime = Time.time;
     }
 
-    //BUG: Draw event stuff
     private void OnAgentHit()
     {
-        Debug.Log("Calling OnAgentHit!");
         lastOnHitTime = Time.time;
     }
 
     private void Update()
     {
-        //BUG: Draw event stuff
         if (Mathf.Abs(lastOnHitTime - Time.time) >= maxTimeBetweenOnHits)
         {
             Debug.Log("Hit cooldown reach ! Calling EndFight");
