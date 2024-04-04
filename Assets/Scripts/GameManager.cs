@@ -13,8 +13,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Needed Variables")]
     [SerializeField] CombatManager combatManager;
+    [SerializeField] TeamArchetypeSummaryHandler teamUIHandler;
     [SerializeField] StatsShuffler shuffler;
+    [SerializeField] SimulationSummaryUI simulationSummaryUI;
 
+    int currentGen = 0;
+    int lastWinningTeam => combatManager.GetLastWinningTeam();
 
     void Awake()
     {
@@ -36,11 +40,15 @@ public class GameManager : MonoBehaviour
             combatManager.AddTeam(newAgentTeam);
         }
 
+        teamUIHandler.SetupUI(teamAmount);
+
         StartFight();
     }
 
     void StartFight()
     {
+        currentGen++;
+        simulationSummaryUI.UpdateUI(currentGen, lastWinningTeam);
         combatManager.StartFight(OnFightOver);
     }
 
@@ -49,6 +57,7 @@ public class GameManager : MonoBehaviour
         foreach (var perf in teamsPerformances)
         {
             combatManager.UpdateTeamStrategy(teamsPerformances.IndexOf(perf), shuffler.GetBestBuilds(perf));
+            teamUIHandler.UpdateUI(teamsPerformances.IndexOf(perf), shuffler.GetBestBuilds(perf));
         }
 
         combatManager.ResetAllAgents();

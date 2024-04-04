@@ -23,6 +23,8 @@ public class CombatManager : MonoBehaviour
 
     public bool IsFightRunning => isFightRunning;
 
+    int lastWinningTeam = -1;
+
     private void Awake()
     {
         Instance = this;
@@ -70,6 +72,8 @@ public class CombatManager : MonoBehaviour
     void OnAgentDeath()
     {
         int teamsWithLivingPlayerAlive = 0;
+
+        int possiblyWinningTeam = -1;
         foreach (List<Agent> team in teams)
         {
             foreach (Agent agent in team)
@@ -77,6 +81,7 @@ public class CombatManager : MonoBehaviour
                 if (agent.IsAlive)
                 {
                     teamsWithLivingPlayerAlive++;
+                    possiblyWinningTeam = teams.IndexOf(team);
                     break;
                 }
             }
@@ -89,6 +94,7 @@ public class CombatManager : MonoBehaviour
 
         if (teamsWithLivingPlayerAlive <= 1)
         {
+            lastWinningTeam = possiblyWinningTeam;
             EndFight();
             return;
         }
@@ -160,5 +166,10 @@ public class CombatManager : MonoBehaviour
             int chosenStrategy = UnityEngine.Random.Range(0, possibleBuilds.Count);
             agent.UpdateData(possibleBuilds[chosenStrategy].Item2, possibleBuilds[chosenStrategy].Item1);
         }
+    }
+
+    public int GetLastWinningTeam()
+    {
+        return lastWinningTeam;
     }
 }
