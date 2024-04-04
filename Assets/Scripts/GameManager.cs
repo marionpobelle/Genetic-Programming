@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] CombatManager combatManager;
     [SerializeField] TeamArchetypeSummaryHandler teamUIHandler;
     [SerializeField] StatsShuffler shuffler;
+    [SerializeField] SimulationSummaryUI simulationSummaryUI;
 
+    int currentGen = 0;
+    int lastWinningTeam => combatManager.GetLastWinningTeam();
 
     void Awake()
     {
@@ -44,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     void StartFight()
     {
+        currentGen++;
+        simulationSummaryUI.UpdateUI(currentGen, lastWinningTeam);
         combatManager.StartFight(OnFightOver);
     }
 
