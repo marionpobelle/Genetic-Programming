@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class StatPanelDisplayHandler : MonoBehaviour
@@ -19,6 +20,13 @@ public class StatPanelDisplayHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI Precisiontxt;
     [SerializeField] TextMeshProUGUI AttackSpeedtxt;
     [SerializeField] TextMeshProUGUI AttackDistancetxt;
+    [SerializeField] Slider atkSlider;
+    [SerializeField] Slider defSlider;
+    [SerializeField] Slider precSlider;
+    [SerializeField] Slider evaSlider;
+    [SerializeField] Slider aspSlider;
+    [SerializeField] Slider araSlider;
+    [SerializeField] Slider hpSlider;
 
     [SerializeField] TextMeshProUGUI Killtxt;
     [SerializeField] TextMeshProUGUI Damagetxt;
@@ -99,15 +107,22 @@ public class StatPanelDisplayHandler : MonoBehaviour
 
         if (allAgents[displayAgentIndex].IsAlive == false)
         {
-            while (allAgents[displayAgentIndex].IsAlive == false)
-            {
-                displayAgentIndex--;
-                if (displayAgentIndex < 0) displayAgentIndex = allAgents.Count - 1;
-            }
+            Toggle(false);
             
         }
         transform.position = allAgents[displayAgentIndex].transform.position + new Vector3(0, 8, 0);
         SetStatsPanel(allAgents[displayAgentIndex]);
+
+        if (allAgents[displayAgentIndex].IsAlive)
+        {
+            atkSlider.value = allAgents[displayAgentIndex].Data.AdditionalAttackPoints;
+            defSlider.value = allAgents[displayAgentIndex].Data.AdditionalDefensePoints;
+            precSlider.value = allAgents[displayAgentIndex].Data.AdditionalPrecisionPoints;
+            evaSlider.value = allAgents[displayAgentIndex].Data.AdditionalEvasivenessPoints;
+            aspSlider.value = allAgents[displayAgentIndex].Data.AdditionalSpeedPoints;
+            araSlider.value = allAgents[displayAgentIndex].Data.AdditionalAttackDistancePoints;
+            hpSlider.value = allAgents[displayAgentIndex].Data.AdditionalHPPoints;
+        }
     }
 
 
